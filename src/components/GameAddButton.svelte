@@ -1,16 +1,29 @@
 <script lang="ts">
+  import { type Option } from "@fering-org/functional-helper"
+
   import { concat } from "../utils"
+
+  export let onChange: Option<(imageSrc: string[]) => void> = undefined
+
+  let fileInput: Option<HTMLInputElement>
 </script>
 
-<button class={concat([
-  "w-[80px]",
-  "h-full",
-  "flex",
-  "flex-col",
-  "gap-[10px]",
-  "justify-center",
-  "items-center",
-])}>
+<button
+  class={concat([
+    "w-[80px]",
+    "h-full",
+    "flex",
+    "flex-col",
+    "gap-[10px]",
+    "justify-center",
+    "items-center",
+  ])}
+  on:click={e => {
+    if (fileInput) {
+      fileInput.showPicker()
+    }
+  }}
+>
   <div class={concat([
     "w-[51px]",
     "h-[51px]",
@@ -51,4 +64,28 @@
   ])}>
     Добавить обложку
   </div>
+  <input
+    class={concat([
+      "hidden",
+    ])}
+    bind:this={fileInput}
+    type="file"
+    accept=".png,.jpeg,.jpg,.webp,.gif"
+    multiple
+    on:change={e => {
+      if (onChange) {
+        const fileInput = e.currentTarget
+        const files = fileInput.files
+        if (files) {
+          const urls = new Array(files.length)
+          for (let index = 0; index < files.length; index++) {
+            const element = files[index]
+            const url = URL.createObjectURL(element)
+            urls[index] = url
+          }
+          onChange(urls)
+        }
+      }
+    }}
+  />
 </button>
