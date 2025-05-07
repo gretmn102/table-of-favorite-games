@@ -3,6 +3,7 @@
   import NavBar from "./components/NavBar.svelte"
   import Palette from "./components/Palette.svelte"
   import GameCanvas from "./components/GameCanvas.svelte"
+  import Button from "./components/Button.svelte";
 </script>
 
 <main>
@@ -35,6 +36,16 @@
           "overflow-y-auto",
         ])}>
           <GameCanvas />
+        </div>
+        <div class={concat([
+          "shrink-0",
+          "w-full",
+          "h-[72px]",
+          "flex",
+          "justify-center",
+          "items-center",
+        ])}>
+          <Button>Сохранить</Button>
         </div>
       </div>
     </div>
