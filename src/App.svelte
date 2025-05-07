@@ -1,5 +1,8 @@
 <script lang="ts">
   import { concat } from "./utils"
+  import NavBar from "./components/NavBar.svelte"
+  import Palette from "./components/Palette.svelte"
+  import GameCanvas from "./components/GameCanvas.svelte"
 </script>
 
 <main>
@@ -16,7 +19,22 @@
       "flex",
       "flex-col",
     ])}>
-      Hello world!
+      <NavBar />
+      <div class={concat([
+        "size-full",
+        "px-[4px]",
+        "flex",
+        "flex-col",
+        "items-center",
+        "gap-[2px]",
+      ])}>
+        <Palette />
+        <div class={concat([
+          // "flex-grow",
+        ])}>
+          <GameCanvas />
+        </div>
+      </div>
     </div>
   </div>
 </main>
