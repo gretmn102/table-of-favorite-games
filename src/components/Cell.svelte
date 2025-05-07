@@ -2,17 +2,24 @@
   import { Option } from "@fering-org/functional-helper"
 
   import { concat } from "../utils"
+
   export let description: string
   export let imageSrc: Option<string>
+  export let onClick: Option<() => void> = undefined
 </script>
 
-<div class={concat([
-  "flex",
-  "flex-col",
-  "gap-[4px]",
-  "w-32",
-  "h-[165px]",
-])}>
+<button
+  class={concat([
+    "flex",
+    "flex-col",
+    "gap-[4px]",
+    "w-32",
+    "h-[165px]",
+  ])}
+  on:click={_ => {
+    if (onClick) { onClick() }
+  }}
+>
   {#if imageSrc}
     <img
       class={concat([
@@ -39,4 +46,4 @@
   ])}>
     {description}
   </div>
-</div>
+</button>

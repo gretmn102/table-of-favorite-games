@@ -1,9 +1,15 @@
 <script lang="ts">
+  import { type Option } from "@fering-org/functional-helper"
+
   import { concat } from "./utils"
+  import { CellData, CellStorage, type GameCoverId } from "./types"
   import NavBar from "./components/NavBar.svelte"
   import Palette from "./components/Palette.svelte"
   import GameCanvas from "./components/GameCanvas.svelte"
-  import Button from "./components/Button.svelte";
+  import Button from "./components/Button.svelte"
+
+  let gameCoverActive: Option<GameCoverId> = undefined
+  let cells: CellStorage = CellStorage.create()
 </script>
 
 <main>
@@ -30,12 +36,40 @@
         "gap-[2px]",
         "overflow-y-auto",
       ])}>
-        <Palette />
+        <Palette
+          onSelect={gameCoverId => {
+            gameCoverActive = gameCoverId
+          }}
+          onDeselect={gameCoverId => {
+            gameCoverActive = undefined
+          }}
+        />
         <div class={concat([
           "flex-grow",
           "overflow-y-auto",
         ])}>
-          <GameCanvas />
+          <GameCanvas
+            cells={cells}
+            onClick={cellIndex => {
+              if (gameCoverActive) {
+                cells = CellStorage.updateCell(
+                  cells,
+                  cellIndex,
+                  cell => {
+                    return CellData.updateImageSrc(cell, _ => gameCoverActive)
+                  }
+                )
+              } else {
+                cells = CellStorage.updateCell(
+                  cells,
+                  cellIndex,
+                  cell => {
+                    return CellData.updateImageSrc(cell, _ => undefined)
+                  }
+                )
+              }
+            }}
+          />
         </div>
         <div class={concat([
           "shrink-0",
