@@ -1,5 +1,9 @@
 <script lang="ts">
   import { concat } from "./utils"
+  import NavBar from "./components/NavBar.svelte"
+  import Palette from "./components/Palette.svelte"
+  import GameCanvas from "./components/GameCanvas.svelte"
+  import Button from "./components/Button.svelte";
 </script>
 
 <main>
@@ -16,7 +20,34 @@
       "flex",
       "flex-col",
     ])}>
-      Hello world!
+      <NavBar />
+      <div class={concat([
+        "size-full",
+        "px-[4px]",
+        "flex",
+        "flex-col",
+        "items-center",
+        "gap-[2px]",
+        "overflow-y-auto",
+      ])}>
+        <Palette />
+        <div class={concat([
+          "flex-grow",
+          "overflow-y-auto",
+        ])}>
+          <GameCanvas />
+        </div>
+        <div class={concat([
+          "shrink-0",
+          "w-full",
+          "h-[72px]",
+          "flex",
+          "justify-center",
+          "items-center",
+        ])}>
+          <Button>Сохранить</Button>
+        </div>
+      </div>
     </div>
   </div>
 </main>
