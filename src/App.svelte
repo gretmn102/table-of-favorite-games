@@ -27,10 +27,12 @@
         "flex-col",
         "items-center",
         "gap-[2px]",
+        "overflow-y-auto",
       ])}>
         <Palette />
         <div class={concat([
-          // "flex-grow",
+          "flex-grow",
+          "overflow-y-auto",
         ])}>
           <GameCanvas />
         </div>

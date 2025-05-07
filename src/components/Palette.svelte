@@ -1,6 +1,6 @@
 <script lang="ts">
   import { concat } from "../utils"
-  import GameAddButton from "./GameAddButton.svelte";
+  import GameAddButton from "./GameAddButton.svelte"
   import GameCover from "./GameCover.svelte"
 
   const gameCoverSrcs = [
@@ -14,7 +14,7 @@
 
 <div class={concat([
   "w-full",
-  "h-[127px]",
+  "max-h-[127px]",
   "flex",
   "overflow-auto",
 ])}>
