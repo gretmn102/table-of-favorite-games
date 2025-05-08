@@ -7,6 +7,7 @@
   import Palette from "./components/Palette.svelte"
   import GameCanvas from "./components/GameCanvas.svelte"
   import Button from "./components/Button.svelte"
+  import { Table } from "./table"
 
   let gameCoverActive: Option<GameCoverId> = undefined
   let cells: CellStorage = CellStorage.create()
@@ -79,7 +80,26 @@
           "justify-center",
           "items-center",
         ])}>
-          <Button>Сохранить</Button>
+          <Button onClick={() => {
+            const [w, h] = [2048, 1768]
+            const canvas = document.createElement("canvas")
+            canvas.width = w
+            canvas.height = h
+            const ctx = canvas.getContext("2d")
+            if (!ctx) { return }
+            Table.draw({
+              cells: cells,
+              gapX: 50,
+              gapY: 58,
+              cellWidth: 127,
+              cellHeight: 165,
+              width: w,
+              height: h,
+            }, ctx)
+            window.open(canvas.toDataURL())
+          }}>
+            Сохранить
+          </Button>
         </div>
       </div>
     </div>

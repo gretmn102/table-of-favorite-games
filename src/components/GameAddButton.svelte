@@ -3,7 +3,7 @@
 
   import { concat } from "../utils"
 
-  export let onChange: Option<(imageSrc: string[]) => void> = undefined
+  export let onChange: Option<(files: FileList) => void> = undefined
 
   let fileInput: Option<HTMLInputElement>
 </script>
@@ -77,13 +77,7 @@
         const fileInput = e.currentTarget
         const files = fileInput.files
         if (files) {
-          const urls = new Array(files.length)
-          for (let index = 0; index < files.length; index++) {
-            const element = files[index]
-            const url = URL.createObjectURL(element)
-            urls[index] = url
-          }
-          onChange(urls)
+          onChange(files)
         }
       }
     }}
