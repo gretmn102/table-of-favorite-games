@@ -1,9 +1,5 @@
 import { CellData, CellStorage, GameCoverStorage } from "./types"
 
-const cellGap = 4
-const cellDescriptionFont = "bold 14px Tahoma"
-const cellDescriptionLineHeight = 17
-
 export namespace TextDrawing {
   export function splitToLines(
     context: CanvasRenderingContext2D,
@@ -47,14 +43,33 @@ export namespace TextDrawing {
   }
 }
 
+export type CellParams = {
+  width: number
+  height: number
+  gap: number
+  descriptionFont: string
+  descriptionLineHeight: number
+}
+
+export namespace CellParams {
+  export function create(): CellParams {
+    return {
+      width: 127,
+      height: 165,
+      gap: 4,
+      descriptionFont: "bold 14px Tahoma",
+      descriptionLineHeight: 17,
+    }
+  }
+}
+
 export type Table = {
   cells: CellStorage
-  gapX: number,
-  gapY: number,
-  cellWidth: number,
-  cellHeight: number,
-  width: number,
-  height: number,
+  gapX: number
+  gapY: number
+  cellParams: CellParams
+  width: number
+  height: number
 }
 
 export namespace Table {
@@ -72,23 +87,29 @@ export namespace Table {
 
   export function drawCell(
     canvasContext: CanvasRenderingContext2D,
-    { cellWidth, cellHeight }: Table,
+    {
+      width: cellWidth,
+      height: cellHeight,
+      descriptionFont,
+      descriptionLineHeight,
+      gap,
+    }: CellParams,
     gameCoverStorage: GameCoverStorage,
     cell: CellData,
     [x, y]: [ number, number ],
   ) {
     function drawText() {
-      canvasContext.font = cellDescriptionFont
+      canvasContext.font = descriptionFont
       const lines = TextDrawing.splitToLines(canvasContext, cell.description, cellWidth)
       canvasContext.textBaseline = "top"
-      const linesHeight = cellDescriptionLineHeight * lines.length
+      const linesHeight = descriptionLineHeight * lines.length
       TextDrawing.drawTextLines(
         canvasContext,
         lines,
         x,
         y + (cellHeight - linesHeight),
         cellWidth,
-        cellDescriptionLineHeight,
+        descriptionLineHeight,
       )
       return linesHeight
     }
@@ -111,7 +132,7 @@ export namespace Table {
     const textHeight = drawText()
 
     const gameCoverBlockWidth = cellWidth
-    const gameCoverBlockHeight = cellHeight - textHeight - cellGap
+    const gameCoverBlockHeight = cellHeight - textHeight - gap
     if (!drawImage(x, y, gameCoverBlockWidth, gameCoverBlockHeight)) {
       drawRect(x, y, gameCoverBlockWidth, gameCoverBlockHeight)
     }
@@ -124,8 +145,9 @@ export namespace Table {
   ) {
     const width = table.width
     const height = table.height
-    const cellWidth = table.cellWidth
-    const cellHeight = table.cellHeight
+    const cellParams = table.cellParams
+    const cellWidth = cellParams.width
+    const cellHeight = cellParams.height
     const cells = table.cells
     const cellsCount = cells.length
     const gapX = table.gapX
@@ -139,7 +161,7 @@ export namespace Table {
       if (columnIndex >= columnsCount) { break }
       const x = rowIndex * (gapX + cellWidth)
       const y = columnIndex * (gapY + cellHeight)
-      drawCell(canvasContext, table, gameCoverStorage, cell, [x, y])
+      drawCell(canvasContext, cellParams, gameCoverStorage, cell, [x, y])
     }
   }
 

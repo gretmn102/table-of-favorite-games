@@ -7,7 +7,7 @@
   import Palette from "./components/Palette.svelte"
   import GameCanvas from "./components/GameCanvas.svelte"
   import Button from "./components/Button.svelte"
-  import { Table } from "./table"
+  import { CellParams, Table } from "./table"
 
   let gameCoverActive: Option<GameCoverId> = undefined
   let cells: CellStorage = CellStorage.create()
@@ -95,8 +95,7 @@
               cells: cells,
               gapX: 50,
               gapY: 58,
-              cellWidth: 127,
-              cellHeight: 165,
+              cellParams: CellParams.create(),
               width: w,
               height: h,
             }, gameCoverStorage, ctx)
