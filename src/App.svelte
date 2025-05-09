@@ -2,7 +2,7 @@
   import { type Option } from "@fering-org/functional-helper"
 
   import { concat } from "./utils"
-  import { CellData, CellStorage, type GameCoverId } from "./types"
+  import { CellData, CellStorage, GameCoverStorage, type GameCoverId } from "./types"
   import NavBar from "./components/NavBar.svelte"
   import Palette from "./components/Palette.svelte"
   import GameCanvas from "./components/GameCanvas.svelte"
@@ -11,6 +11,7 @@
 
   let gameCoverActive: Option<GameCoverId> = undefined
   let cells: CellStorage = CellStorage.create()
+  let gameCoverStorage = GameCoverStorage.create()
 </script>
 
 <main>
@@ -43,6 +44,9 @@
           }}
           onDeselect={gameCoverId => {
             gameCoverActive = undefined
+          }}
+          onGameCoverAdded={newGameCover => {
+            gameCoverStorage = GameCoverStorage.add(gameCoverStorage, newGameCover)
           }}
         />
         <div class={concat([
@@ -95,7 +99,7 @@
               cellHeight: 165,
               width: w,
               height: h,
-            }, ctx)
+            }, gameCoverStorage, ctx)
             window.open(canvas.toDataURL())
           }}>
             Сохранить

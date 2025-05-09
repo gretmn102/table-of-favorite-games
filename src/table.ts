@@ -1,4 +1,4 @@
-import { CellData, CellStorage } from "./types"
+import { CellData, CellStorage, GameCoverStorage } from "./types"
 
 export type Table = {
   cells: CellStorage
@@ -25,55 +25,53 @@ export namespace Table {
 
   export function drawCell(
     canvasContext: CanvasRenderingContext2D,
-    [x, y]: [ number, number ],
     {
       cellWidth,
       cellHeight,
     }: Table,
+    gameCoverStorage: GameCoverStorage,
     cell: CellData,
+    [x, y]: [ number, number ],
   ) {
-    // const b = new Blob([])
-    const image = new Image()
+    function drawImage() {
+      if (!cell.imageSrc) { return false }
+      const gameCover = GameCoverStorage.get(gameCoverStorage, cell.imageSrc)
+      if (!gameCover) { return false }
+      canvasContext.drawImage(gameCover.imageBitmap, x, y, cellWidth, cellHeight)
+      return true
+    }
 
-    const reader = new FileReader()
-
-    // const imageData = new ImageData(blob)
-    const blob: Blob = todo
-    createImageBitmap(blob)
-      .then(imageBitmap => {
-        imageBitmap
-      })
-
-    // const imageBitmap = new window.createImageBitmap()
-
-    canvasContext.drawImage()
-    cell.imageSrc
+    if (!drawImage()) {
+      canvasContext.beginPath()
+      canvasContext.lineWidth = 1
+      canvasContext.rect(x + 0.5, y + 0.5, cellWidth - 1, cellHeight - 1)
+      canvasContext.stroke()
+    }
   }
 
   export function drawCells(
     table: Table,
+    gameCoverStorage: GameCoverStorage,
     canvasContext: CanvasRenderingContext2D,
   ) {
     const width = table.width
     const height = table.height
     const cellWidth = table.cellWidth
     const cellHeight = table.cellHeight
-    const cellsCount = table.cells.length
+    const cells = table.cells
+    const cellsCount = cells.length
     const gapX = table.gapX
     const gapY = table.gapY
     const rowsCount = defineCount(cellWidth, gapX, width)
     const columnsCount = defineCount(cellHeight, gapY, height)
 
-    canvasContext.beginPath()
-    canvasContext.lineWidth = 1
     for (let cellIndex = 0; cellIndex < cellsCount; cellIndex++) {
+      const cell = cells[cellIndex]
       const [rowIndex, columnIndex] = [cellIndex % rowsCount, cellIndex / rowsCount | 0]
       if (columnIndex >= columnsCount) { break }
       const x = rowIndex * (gapX + cellWidth)
       const y = columnIndex * (gapY + cellHeight)
-      // canvasContext.rect(x + 0.5, y + 0.5, cellWidth - 1, cellHeight - 1)
-      // canvasContext.drawImage()
-
+      drawCell(canvasContext, table, gameCoverStorage, cell, [x, y])
     }
     // for (let columnIndex = 0; columnIndex < columnsCount; columnIndex++) {
     //   const y = columnIndex * (gapY + cellHeight)
@@ -82,13 +80,13 @@ export namespace Table {
     //     canvasContext.rect(x + 0.5, y + 0.5, cellWidth - 1, cellHeight - 1)
     //   }
     // }
-    canvasContext.stroke()
   }
 
   export function draw(
     table: Table,
+    gameCoverStorage: GameCoverStorage,
     canvasContext: CanvasRenderingContext2D,
   ) {
-    drawCells(table, canvasContext)
+    drawCells(table, gameCoverStorage, canvasContext)
   }
 }

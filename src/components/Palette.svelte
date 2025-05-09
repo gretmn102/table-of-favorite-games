@@ -9,6 +9,7 @@
 
   export let onSelect: ((src: GameCoverId) => void) | undefined = undefined
   export let onDeselect: ((src: GameCoverId) => void) | undefined = undefined
+  export let onGameCoverAdded: Option<((newGameCover: GameCoverData) => void)> = undefined
 
   let gameCoverActiveIndex: Option<number> = undefined
 
@@ -47,12 +48,16 @@
         const file = files[index]
         createImageBitmap(file)
           .then(imageBitmap => {
+            const newGameCover = {
+              id: URL.createObjectURL(file),
+              imageBitmap
+            }
             gameCovers = update(gameCovers, {
-              $push: [{
-                id: URL.createObjectURL(file),
-                imageBitmap
-              }]
+              $push: [newGameCover]
             })
+            if (onGameCoverAdded) {
+              onGameCoverAdded(newGameCover)
+            }
           })
           .catch(errMsg => {
             console.log(`Load "${file.name}" throw error: ${errMsg}`)
