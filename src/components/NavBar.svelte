@@ -41,15 +41,23 @@
 
     ])}
   >
-    <div class={concat([
-      "w-11",
-      "h-full",
-      "flex",
-      "items-center",
-    ])}>
+    <a
+      class={concat([
+        "w-11",
+        "h-full",
+        "flex",
+        "items-center",
+        "fill-[#222034]",
+        "hover:fill-[#45283c]",
+        "focus:fill-[#663931]",
+        "active:fill-[#663931]",
+      ])}
+      href="https://github.com/gretmn102/table-of-favorite-games"
+      target="_blank"
+    >
       <svg viewBox="0 0 16 16">
         <use xlink:href="github-icon.svg#root" href="github-icon.svg#root" />
       </svg>
-    </div>
+    </a>
   </div>
 </nav>
