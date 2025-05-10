@@ -2,7 +2,7 @@
   import { type Option } from "@fering-org/functional-helper"
   import update from "immutability-helper"
 
-  import { concat } from "../utils"
+  import { concat } from "../lib/utils"
   import { type GameCoverId } from "../stores/gameCoverId"
   import { type GameCoverData } from "../stores/gameCoverData"
   import GameAddButton from "./GameAddButton.svelte"

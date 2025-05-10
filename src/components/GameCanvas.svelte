@@ -1,7 +1,7 @@
 <script lang="ts">
   import { type Option } from "@fering-org/functional-helper"
 
-  import { concat } from "../utils"
+  import { concat } from "../lib/utils"
   import { type CellData } from "../stores/cellData"
   import Cell from "./Cell.svelte"
 

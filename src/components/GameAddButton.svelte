@@ -1,7 +1,7 @@
 <script lang="ts">
   import { type Option } from "@fering-org/functional-helper"
 
-  import { concat } from "../utils"
+  import { concat } from "../lib/utils"
 
   export let onChange: Option<(files: FileList) => void> = undefined
 

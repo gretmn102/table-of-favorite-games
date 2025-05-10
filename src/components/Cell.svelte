@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Option } from "@fering-org/functional-helper"
 
-  import { concat } from "../utils"
+  import { concat } from "../lib/utils"
 
   export let description: string
   export let imageSrc: Option<string>

@@ -1,7 +1,7 @@
 import GameCoverStorage from "../stores/gameCoverStorage"
 import CellData from "../stores/cellData"
 import CellStorage from "../stores/cellStorage"
-import { calcFitScale } from "../utils"
+import { calcFitScale } from "./utils"
 
 export namespace TextDrawing {
   export function splitToLines(
