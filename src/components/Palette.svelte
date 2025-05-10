@@ -3,7 +3,7 @@
   import update from "immutability-helper"
 
   import { concat } from "../utils"
-  import { type GameCoverData, type GameCoverId } from "../types"
+  import { type GameCoverData, type GameCoverId } from "../stores/types"
   import GameAddButton from "./GameAddButton.svelte"
   import GameCover from "./GameCover.svelte"
 

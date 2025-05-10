@@ -1,4 +1,4 @@
-import { CellData, CellStorage, GameCoverStorage } from "./types"
+import { CellData, CellStorage, GameCoverStorage } from "./stores/types"
 import { calcFitScale } from "./utils"
 
 export namespace TextDrawing {

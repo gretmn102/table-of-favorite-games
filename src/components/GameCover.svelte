@@ -2,7 +2,7 @@
   import { type Option } from "@fering-org/functional-helper"
 
   import { concat } from "../utils"
-  import type { GameCoverData } from "../types"
+  import type { GameCoverData } from "../stores/types"
 
   export let data: GameCoverData
   export let alt = undefined
