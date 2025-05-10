@@ -140,6 +140,20 @@ export namespace Table {
     return 1 + (tailLength / (gap + sourceLength) | 0)
   }
 
+  export function defineSize(
+    { width: cellWidth, height: cellHeight }: CellParams,
+    cellsCount: number,
+    gapX: number,
+    gapY: number,
+    rowsCount: number,
+  ): [number, number] {
+    const columnsCount = Math.ceil(cellsCount / rowsCount)
+    return [
+      cellWidth + (gapX + cellWidth) * (rowsCount - 1),
+      cellHeight + (gapY + cellHeight) * (columnsCount - 1),
+    ]
+  }
+
   export function drawCells(
     table: Table,
     gameCoverStorage: GameCoverStorage,
