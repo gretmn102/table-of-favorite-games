@@ -1,6 +1,8 @@
 import update from "immutability-helper"
 import { type Option } from "@fering-org/functional-helper"
-import { type GameCoverId, type GameCoverData } from "./types"
+
+import { type GameCoverId } from "./types"
+import { type GameCoverData }from "./gameCoverData"
 
 export type GameCoverStorage = Map<GameCoverId, GameCoverData>
 
