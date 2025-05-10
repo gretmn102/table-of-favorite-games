@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { concat } from "../utils"
+  import { concat } from "../lib/utils"
 </script>
 
 <nav

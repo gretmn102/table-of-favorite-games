@@ -1,13 +1,16 @@
 <script lang="ts">
   import { type Option } from "@fering-org/functional-helper"
 
-  import { concat } from "./utils"
-  import { CellData, CellStorage, GameCoverStorage, type GameCoverId } from "./types"
+  import { concat } from "./lib/utils"
+  import { type GameCoverId } from "./stores/gameCoverId"
+  import CellData from "./stores/cellData"
+  import CellStorage from "./stores/cellStorage"
+  import GameCoverStorage from "./stores/gameCoverStorage"
   import NavBar from "./components/NavBar.svelte"
   import Palette from "./components/Palette.svelte"
   import GameCanvas from "./components/GameCanvas.svelte"
   import Button from "./components/Button.svelte"
-  import { CellParams, Table } from "./table"
+  import { CellParams, Table } from "./lib/table"
 
   let gameCoverActive: Option<GameCoverId> = undefined
   let cells: CellStorage = CellStorage.create()

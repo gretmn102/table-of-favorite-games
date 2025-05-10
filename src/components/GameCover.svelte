@@ -1,8 +1,8 @@
 <script lang="ts">
   import { type Option } from "@fering-org/functional-helper"
 
-  import { concat } from "../utils"
-  import type { GameCoverData } from "../types"
+  import { concat } from "../lib/utils"
+  import { type GameCoverData } from "../stores/gameCoverData"
 
   export let data: GameCoverData
   export let alt = undefined
