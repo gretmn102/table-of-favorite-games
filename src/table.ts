@@ -1,4 +1,5 @@
 import { CellData, CellStorage, GameCoverStorage } from "./types"
+import { calcFitScale } from "./utils"
 
 export namespace TextDrawing {
   export function splitToLines(
@@ -97,7 +98,19 @@ export namespace CellView {
       if (!cell.imageSrc) { return false }
       const gameCover = GameCoverStorage.get(gameCoverStorage, cell.imageSrc)
       if (!gameCover) { return false }
-      canvasContext.drawImage(gameCover.imageBitmap, x, y, blockWidth, blockHeight)
+      const image = gameCover.imageBitmap
+      const imageWidth = image.width
+      const imageHeight = image.height
+      const fitScale = calcFitScale(
+        { width: blockWidth, height: blockHeight},
+        { width: imageWidth, height: imageHeight},
+      )
+      const [w, h] = [imageWidth * fitScale, imageHeight * fitScale]
+      canvasContext.drawImage(
+        image,
+        x + (blockWidth / 2 - w / 2), y + (blockHeight / 2 - h / 2),
+        w, h,
+      )
       return true
     }
 
