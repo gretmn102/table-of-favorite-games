@@ -1,4 +1,4 @@
-import { type GameCoverId } from "./types"
+import { type GameCoverId } from "./gameCoverId"
 
 export type GameCoverData = {
   id: GameCoverId
