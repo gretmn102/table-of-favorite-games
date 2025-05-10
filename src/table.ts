@@ -63,29 +63,8 @@ export namespace CellParams {
   }
 }
 
-export type Table = {
-  cells: CellStorage
-  gapX: number
-  gapY: number
-  cellParams: CellParams
-  width: number
-  height: number
-}
-
-export namespace Table {
-  export function defineCount(
-    sourceLength: number,
-    gap: number,
-    targetLength: number,
-  ) {
-    const tailLength = targetLength - sourceLength
-    if (tailLength < 0) {
-      return 0
-    }
-    return 1 + (tailLength / (gap + sourceLength) | 0)
-  }
-
-  export function drawCell(
+export namespace CellView {
+  export function draw(
     canvasContext: CanvasRenderingContext2D,
     {
       width: cellWidth,
@@ -137,6 +116,29 @@ export namespace Table {
       drawRect(x, y, gameCoverBlockWidth, gameCoverBlockHeight)
     }
   }
+}
+
+export type Table = {
+  cells: CellStorage
+  gapX: number
+  gapY: number
+  cellParams: CellParams
+  width: number
+  height: number
+}
+
+export namespace Table {
+  export function defineCount(
+    sourceLength: number,
+    gap: number,
+    targetLength: number,
+  ) {
+    const tailLength = targetLength - sourceLength
+    if (tailLength < 0) {
+      return 0
+    }
+    return 1 + (tailLength / (gap + sourceLength) | 0)
+  }
 
   export function drawCells(
     table: Table,
@@ -161,7 +163,7 @@ export namespace Table {
       if (columnIndex >= columnsCount) { break }
       const x = rowIndex * (gapX + cellWidth)
       const y = columnIndex * (gapY + cellHeight)
-      drawCell(canvasContext, cellParams, gameCoverStorage, cell, [x, y])
+      CellView.draw(canvasContext, cellParams, gameCoverStorage, cell, [x, y])
     }
   }
 
