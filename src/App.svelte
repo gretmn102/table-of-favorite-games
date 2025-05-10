@@ -2,7 +2,8 @@
   import { type Option } from "@fering-org/functional-helper"
 
   import { concat } from "./utils"
-  import { CellData, GameCoverStorage, type GameCoverId } from "./stores/types"
+  import { GameCoverStorage, type GameCoverId } from "./stores/types"
+  import CellData from "./stores/cellData"
   import { CellStorage } from "./stores/cellStorage"
   import NavBar from "./components/NavBar.svelte"
   import Palette from "./components/Palette.svelte"

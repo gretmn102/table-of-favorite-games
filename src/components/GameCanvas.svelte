@@ -2,7 +2,7 @@
   import { type Option } from "@fering-org/functional-helper"
 
   import { concat } from "../utils"
-  import { type CellData } from "../stores/types"
+  import { type CellData } from "../stores/cellData"
   import Cell from "./Cell.svelte"
 
   export let cells: CellData[]

@@ -31,19 +31,3 @@ export namespace GameCoverStorage {
     return storage.get(id)
   }
 }
-
-export type CellData = {
-  description: string
-  imageSrc: Option<string>
-}
-
-export namespace CellData {
-  export function updateImageSrc(
-    cell: CellData,
-    updateImageSrc: (initSrc: Option<string>) => Option<string>
-  ) : CellData {
-    return update(cell, {
-      imageSrc: { $apply: initSrc => updateImageSrc(initSrc) }
-    })
-  }
-}

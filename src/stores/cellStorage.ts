@@ -1,5 +1,5 @@
 import update from "immutability-helper"
-import { CellData } from "./types"
+import CellData from "./cellData"
 
 export type CellStorage = CellData[]
 

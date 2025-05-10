@@ -1,4 +1,5 @@
-import { CellData, GameCoverStorage } from "./stores/types"
+import { GameCoverStorage } from "./stores/types"
+import CellData from "./stores/cellData"
 import { CellStorage } from "./stores/cellStorage"
 import { calcFitScale } from "./utils"
 
