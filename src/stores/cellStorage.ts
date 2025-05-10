@@ -48,3 +48,5 @@ export namespace CellStorage {
     })
   }
 }
+
+export default CellStorage
