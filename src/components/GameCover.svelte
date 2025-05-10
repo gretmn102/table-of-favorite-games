@@ -2,8 +2,9 @@
   import { type Option } from "@fering-org/functional-helper"
 
   import { concat } from "../utils"
+  import type { GameCoverData } from "../types"
 
-  export let src: string
+  export let data: GameCoverData
   export let alt = undefined
   export let active = false
   export let onClick: Option<() => void> = undefined
@@ -26,7 +27,7 @@
       "object-contain",
       "size-full",
     ])}
-    src={src}
+    src={data.id}
     alt={alt}
   >
 </button>

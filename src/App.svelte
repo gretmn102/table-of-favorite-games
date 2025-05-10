@@ -2,14 +2,16 @@
   import { type Option } from "@fering-org/functional-helper"
 
   import { concat } from "./utils"
-  import { CellData, CellStorage, type GameCoverId } from "./types"
+  import { CellData, CellStorage, GameCoverStorage, type GameCoverId } from "./types"
   import NavBar from "./components/NavBar.svelte"
   import Palette from "./components/Palette.svelte"
   import GameCanvas from "./components/GameCanvas.svelte"
   import Button from "./components/Button.svelte"
+  import { CellParams, Table } from "./table"
 
   let gameCoverActive: Option<GameCoverId> = undefined
   let cells: CellStorage = CellStorage.create()
+  let gameCoverStorage = GameCoverStorage.create()
 </script>
 
 <main>
@@ -42,6 +44,9 @@
           }}
           onDeselect={gameCoverId => {
             gameCoverActive = undefined
+          }}
+          onGameCoverAdded={newGameCover => {
+            gameCoverStorage = GameCoverStorage.add(gameCoverStorage, newGameCover)
           }}
         />
         <div class={concat([
@@ -79,7 +84,30 @@
           "justify-center",
           "items-center",
         ])}>
-          <Button>Сохранить</Button>
+          <Button onClick={() => {
+            const [gapX, gapY] = [50, 58]
+            const cellParams = CellParams.create()
+            const [w, h] = Table.defineSize(
+              cellParams, cells.length, gapX, gapY, 6
+            )
+            const canvas = document.createElement("canvas")
+            canvas.width = w
+            canvas.height = h
+            const ctx = canvas.getContext("2d")
+            if (!ctx) { return }
+            const table = {
+              cells: cells,
+              gapX: 50,
+              gapY: 58,
+              cellParams,
+              width: w,
+              height: h,
+            }
+            Table.draw(table, gameCoverStorage, ctx)
+            window.open(canvas.toDataURL())
+          }}>
+            Сохранить
+          </Button>
         </div>
       </div>
     </div>
