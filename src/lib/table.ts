@@ -3,7 +3,14 @@ import CellData from "../stores/cellData"
 import CellStorage from "../stores/cellStorage"
 import { calcFitScale } from "./utils"
 
-export namespace TextDrawing {
+export type TextView = {
+  lineHeight: number
+  width: number
+  height: number
+  lines: string[]
+}
+
+export namespace TextView {
   export function splitToLines(
     context: CanvasRenderingContext2D,
     text: string,
@@ -27,20 +34,34 @@ export namespace TextDrawing {
     return lines
   }
 
-  export function drawTextLines(
+  export function create(
     context: CanvasRenderingContext2D,
-    lines: string[],
+    text: string,
+    lineHeight: number,
+    maxWidth: number,
+  ): TextView {
+    const lines = splitToLines(context, text, maxWidth)
+    return {
+      lineHeight,
+      width: maxWidth,
+      height: lineHeight * lines.length,
+      lines,
+    }
+  }
+
+  export function draw(
+    { lines, lineHeight, width }: TextView,
+    context: CanvasRenderingContext2D,
     x: number,
     y: number,
-    maxWidth: number,
-    lineHeight: number
   ) {
+    context.textBaseline = "top"
     context.textAlign = "center"
-    const halfMaxWidth = Math.round(maxWidth / 2) + 1
+    const halfWidth = Math.round(width / 2) + 1
     let currentY = y
     for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
       const line = lines[lineIndex]
-      context.fillText(line, x + halfMaxWidth, currentY)
+      context.fillText(line, x + halfWidth, currentY)
       currentY += lineHeight
     }
   }
@@ -83,18 +104,19 @@ export namespace CellView {
     function drawText() {
       canvasContext.fillStyle = "black"
       canvasContext.font = descriptionFont
-      const lines = TextDrawing.splitToLines(canvasContext, cell.description, cellWidth)
-      canvasContext.textBaseline = "top"
-      const linesHeight = descriptionLineHeight * lines.length
-      TextDrawing.drawTextLines(
+      const textView = TextView.create(
         canvasContext,
-        lines,
-        x,
-        y + (cellHeight - linesHeight),
-        cellWidth,
+        cell.description,
         descriptionLineHeight,
+        cellWidth
       )
-      return linesHeight
+      TextView.draw(
+        textView,
+        canvasContext,
+        x,
+        y + (cellHeight - textView.height)
+      )
+      return textView.height
     }
 
     function drawImage(x: number, y: number, blockWidth: number, blockHeight: number) {
