@@ -27,7 +27,8 @@
       "relative", // for children with absolute
       "w-full",
       "max-w-[480px]",
-      "h-screen",
+      "h-dvh",
+      "h-[calc(var(--vh,_1vh)_*_100)]",
       "bg-[#e5e5e5]",
       "flex",
       "flex-col",
