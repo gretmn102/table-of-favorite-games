@@ -81,6 +81,7 @@ export namespace CellView {
     [x, y]: [ number, number ],
   ) {
     function drawText() {
+      canvasContext.fillStyle = "black"
       canvasContext.font = descriptionFont
       const lines = TextDrawing.splitToLines(canvasContext, cell.description, cellWidth)
       canvasContext.textBaseline = "top"
@@ -201,6 +202,8 @@ export namespace Table {
     gameCoverStorage: GameCoverStorage,
     canvasContext: CanvasRenderingContext2D,
   ) {
+    canvasContext.fillStyle = "white"
+    canvasContext.fillRect(0, 0, table.width, table. height)
     drawCells(table, gameCoverStorage, canvasContext)
   }
 }
