@@ -170,6 +170,26 @@ export namespace Table {
     ]
   }
 
+  export function create(
+    cells: CellStorage,
+    columnsCount: number,
+  ): Table {
+    const [gapX, gapY] = [50, 58]
+    const cellParams = CellParams.create()
+    const [width, height] = Table.defineSize(
+      cellParams, cells.length, gapX, gapY, columnsCount
+    )
+    const table = {
+      cells,
+      gapX,
+      gapY,
+      cellParams,
+      width,
+      height,
+    }
+    return table
+  }
+
   export function drawCells(
     table: Table,
     gameCoverStorage: GameCoverStorage,

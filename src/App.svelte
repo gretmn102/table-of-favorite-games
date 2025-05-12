@@ -90,24 +90,12 @@
           "items-center",
         ])}>
           <Button onClick={() => {
-            const [gapX, gapY] = [50, 58]
-            const cellParams = CellParams.create()
-            const [w, h] = Table.defineSize(
-              cellParams, cells.length, gapX, gapY, 6
-            )
+            const table = Table.create(cells, 6)
             const canvas = document.createElement("canvas")
-            canvas.width = w
-            canvas.height = h
+            canvas.width = table.width
+            canvas.height = table.height
             const ctx = canvas.getContext("2d")
             if (!ctx) { return }
-            const table = {
-              cells: cells,
-              gapX: 50,
-              gapY: 58,
-              cellParams,
-              width: w,
-              height: h,
-            }
             Table.draw(table, gameCoverStorage, ctx)
             canvas.toBlob(blob => {
               if (blob) {
