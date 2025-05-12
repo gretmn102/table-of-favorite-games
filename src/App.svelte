@@ -11,6 +11,7 @@
   import GameCanvas from "./components/GameCanvas.svelte"
   import Button from "./components/Button.svelte"
   import { CellParams, Table } from "./lib/table"
+  import { download } from "./lib/fileInputOutput";
 
   let gameCoverActive: Option<GameCoverId> = undefined
   let cells: CellStorage = CellStorage.create()
@@ -107,7 +108,12 @@
               height: h,
             }
             Table.draw(table, gameCoverStorage, ctx)
-            window.open(canvas.toDataURL())
+            canvas.toBlob(blob => {
+              if (blob) {
+                download(blob, "table-of-favorite-game.png")
+                // todo: perf(output): remove canvas after all
+              }
+            })
           }}>
             Сохранить
           </Button>
