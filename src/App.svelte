@@ -26,7 +26,6 @@
     <div class={concat([
       "relative", // for children with absolute
       "w-full",
-      "max-w-[480px]",
       "h-dvh",
       "h-[calc(var(--vh,_1vh)_*_100)]",
       "bg-[#e5e5e5]",
