@@ -266,16 +266,20 @@ export type OutputImage = {
 }
 
 export namespace OutputImage {
+  const titleFontSize = 60
+  const titleFont = `${titleFontSize}px Tahoma`
+  const titleFillStyle = "black"
+
   export function create(
     canvasContext: CanvasRenderingContext2D,
     cellStorage: CellStorage,
   ): OutputImage {
-    canvasContext.fillStyle = "black"
-    canvasContext.font = "bold 20px Tahoma"
+    canvasContext.fillStyle = titleFillStyle
+    canvasContext.font = titleFont
     const titleView = TextView.create(
       canvasContext,
       "Любимые игры",
-      22,
+      titleFontSize,
     )
     const tableView = Table.create(cellStorage, 6)
     const size = {
@@ -298,8 +302,8 @@ export namespace OutputImage {
     canvasContext.fillRect(0, 0, size.width, size.height)
 
     canvasContext.textBaseline = "top"
-    canvasContext.fillStyle = "black"
-    canvasContext.font = "bold 20px Tahoma"
+    canvasContext.fillStyle = titleFillStyle
+    canvasContext.font = titleFont
     TextView.draw(
       titleView,
       canvasContext,
