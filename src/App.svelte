@@ -95,6 +95,7 @@
               }
             )
           }}
+          onDropAllow={cellIndex => gameCoverDraged !== undefined}
           />
         </div>
         <div class={concat([
