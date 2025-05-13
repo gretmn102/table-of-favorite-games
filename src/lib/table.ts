@@ -4,7 +4,9 @@ import CellStorage from "../stores/cellStorage"
 import { calcFitScale, type Pos, type Size } from "./utils"
 
 export type TextView = {
+  color: string
   lineHeight: number
+  font: string
   width: number
   height: number
   lines: string[]
@@ -36,12 +38,17 @@ export namespace TextView {
 
   export function create(
     context: CanvasRenderingContext2D,
+    color: string,
+    font: string,
     text: string,
     lineHeight: number,
     maxWidth?: number,
   ): TextView {
+    context.font = font
     if (!maxWidth) {
       return {
+        color,
+        font,
         lineHeight,
         width: context.measureText(text).width,
         height: lineHeight,
@@ -50,6 +57,8 @@ export namespace TextView {
     }
     const lines = splitToLines(context, text, maxWidth)
     return {
+      color,
+      font,
       lineHeight,
       width: maxWidth,
       height: lineHeight * lines.length,
@@ -58,13 +67,15 @@ export namespace TextView {
   }
 
   export function draw(
-    { lines, lineHeight, width }: TextView,
+    { lines, lineHeight, width, font, color }: TextView,
     context: CanvasRenderingContext2D,
     x: number,
     y: number,
   ) {
     context.textBaseline = "top"
     context.textAlign = "center"
+    context.font = font
+    context.fillStyle = color
     const halfWidth = Math.round(width / 2) + 1
     let currentY = y
     for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
@@ -110,10 +121,10 @@ export namespace CellView {
     [x, y]: [ number, number ],
   ) {
     function drawText() {
-      canvasContext.fillStyle = "black"
-      canvasContext.font = descriptionFont
       const textView = TextView.create(
         canvasContext,
+        "black",
+        descriptionFont,
         cell.description,
         descriptionLineHeight,
         cellWidth
@@ -266,25 +277,24 @@ export type OutputImage = {
 }
 
 export namespace OutputImage {
-  const titleFontSize = 60
-  const titleFont = `${titleFontSize}px Tahoma`
-  const titleFillStyle = "black"
+  const gap = 10
 
   export function create(
     canvasContext: CanvasRenderingContext2D,
     cellStorage: CellStorage,
   ): OutputImage {
-    canvasContext.fillStyle = titleFillStyle
-    canvasContext.font = titleFont
+    const titleFontSize = 60
     const titleView = TextView.create(
       canvasContext,
+      "black",
+      `${titleFontSize}px Tahoma`,
       "Любимые игры",
       titleFontSize,
     )
     const tableView = Table.create(cellStorage, 6)
     const size = {
       width: tableView.width,
-      height: titleView.height + tableView.height,
+      height: titleView.height + gap + tableView.height,
     }
     return {
       titleView,
@@ -301,9 +311,6 @@ export namespace OutputImage {
     canvasContext.fillStyle = "white"
     canvasContext.fillRect(0, 0, size.width, size.height)
 
-    canvasContext.textBaseline = "top"
-    canvasContext.fillStyle = titleFillStyle
-    canvasContext.font = titleFont
     TextView.draw(
       titleView,
       canvasContext,
@@ -314,7 +321,7 @@ export namespace OutputImage {
       tableView,
       gameCoverStorage,
       canvasContext,
-      { x: 0, y: titleView.height},
+      { x: 0, y: gap + titleView.height },
     )
   }
 }
