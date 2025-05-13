@@ -6,6 +6,7 @@
   export let description: string
   export let imageSrc: Option<string>
   export let onClick: Option<() => void> = undefined
+  export let onDrop: Option<() => void> = undefined
 </script>
 
 <button
@@ -18,6 +19,13 @@
   ])}
   on:click={_ => {
     if (onClick) { onClick() }
+  }}
+  on:drop={_ => {
+    if (onDrop) { onDrop() }
+  }}
+  on:dragover={e => {
+    // prevent default to allow drop
+    e.preventDefault()
   }}
 >
   {#if imageSrc}

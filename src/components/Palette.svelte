@@ -9,6 +9,8 @@
   import GameCover from "./GameCover.svelte"
 
   export let onSelect: ((src: GameCoverId) => void) | undefined = undefined
+  export let onDrag: Option<(src: GameCoverId) => void> = undefined
+  export let onDragEnd: Option<(src: GameCoverId) => void> = undefined
   export let onDeselect: ((src: GameCoverId) => void) | undefined = undefined
   export let onGameCoverAdded: Option<((newGameCover: GameCoverData) => void)> = undefined
 
@@ -39,6 +41,16 @@
           if (onSelect) {
             onSelect(gameCover.id)
           }
+        }
+      }}
+      onDrag={() => {
+        if (onDrag) {
+          onDrag(gameCover.id)
+        }
+      }}
+      onDragEnd={() => {
+        if (onDragEnd) {
+          onDragEnd(gameCover.id)
         }
       }}
     />

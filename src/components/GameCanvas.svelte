@@ -7,6 +7,7 @@
 
   export let cells: CellData[]
   export let onClick: Option<(cellIndex: number) => void> = undefined
+  export let onDrop: Option<(cellIndex: number) => void> = undefined
 </script>
 
 <div class={concat([
@@ -28,6 +29,11 @@
       onClick={() => {
         if (onClick) {
           onClick(cellIndex)
+        }
+      }}
+      onDrop={() => {
+        if (onDrop) {
+          onDrop(cellIndex)
         }
       }}
     />
