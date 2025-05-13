@@ -4,6 +4,8 @@ export function concat(classes: string []) {
 
 export type Size = { width: number, height: number }
 
+export type Pos = { x: number, y: number }
+
 export function calcFitScale(
   viewportSize: Size,
   imageSize: Size,

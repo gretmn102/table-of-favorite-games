@@ -1,9 +1,18 @@
 import GameCoverStorage from "../stores/gameCoverStorage"
 import CellData from "../stores/cellData"
 import CellStorage from "../stores/cellStorage"
-import { calcFitScale } from "./utils"
+import { calcFitScale, type Pos, type Size } from "./utils"
 
-export namespace TextDrawing {
+export type TextView = {
+  color: string
+  lineHeight: number
+  font: string
+  width: number
+  height: number
+  lines: string[]
+}
+
+export namespace TextView {
   export function splitToLines(
     context: CanvasRenderingContext2D,
     text: string,
@@ -27,20 +36,51 @@ export namespace TextDrawing {
     return lines
   }
 
-  export function drawTextLines(
+  export function create(
     context: CanvasRenderingContext2D,
-    lines: string[],
+    color: string,
+    font: string,
+    text: string,
+    lineHeight: number,
+    maxWidth?: number,
+  ): TextView {
+    context.font = font
+    if (!maxWidth) {
+      return {
+        color,
+        font,
+        lineHeight,
+        width: context.measureText(text).width,
+        height: lineHeight,
+        lines: [text],
+      }
+    }
+    const lines = splitToLines(context, text, maxWidth)
+    return {
+      color,
+      font,
+      lineHeight,
+      width: maxWidth,
+      height: lineHeight * lines.length,
+      lines,
+    }
+  }
+
+  export function draw(
+    { lines, lineHeight, width, font, color }: TextView,
+    context: CanvasRenderingContext2D,
     x: number,
     y: number,
-    maxWidth: number,
-    lineHeight: number
   ) {
+    context.textBaseline = "top"
     context.textAlign = "center"
-    const halfMaxWidth = Math.round(maxWidth / 2) + 1
+    context.font = font
+    context.fillStyle = color
+    const halfWidth = Math.round(width / 2) + 1
     let currentY = y
     for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
       const line = lines[lineIndex]
-      context.fillText(line, x + halfMaxWidth, currentY)
+      context.fillText(line, x + halfWidth, currentY)
       currentY += lineHeight
     }
   }
@@ -81,20 +121,21 @@ export namespace CellView {
     [x, y]: [ number, number ],
   ) {
     function drawText() {
-      canvasContext.fillStyle = "black"
-      canvasContext.font = descriptionFont
-      const lines = TextDrawing.splitToLines(canvasContext, cell.description, cellWidth)
-      canvasContext.textBaseline = "top"
-      const linesHeight = descriptionLineHeight * lines.length
-      TextDrawing.drawTextLines(
+      const textView = TextView.create(
         canvasContext,
-        lines,
-        x,
-        y + (cellHeight - linesHeight),
-        cellWidth,
+        "black",
+        descriptionFont,
+        cell.description,
         descriptionLineHeight,
+        cellWidth
       )
-      return linesHeight
+      TextView.draw(
+        textView,
+        canvasContext,
+        x,
+        y + (cellHeight - textView.height)
+      )
+      return textView.height
     }
 
     function drawImage(x: number, y: number, blockWidth: number, blockHeight: number) {
@@ -170,11 +211,33 @@ export namespace Table {
     ]
   }
 
+  export function create(
+    cells: CellStorage,
+    columnsCount: number,
+  ): Table {
+    const [gapX, gapY] = [50, 58]
+    const cellParams = CellParams.create()
+    const [width, height] = Table.defineSize(
+      cellParams, cells.length, gapX, gapY, columnsCount
+    )
+    const table = {
+      cells,
+      gapX,
+      gapY,
+      cellParams,
+      width,
+      height,
+    }
+    return table
+  }
+
   export function drawCells(
     table: Table,
     gameCoverStorage: GameCoverStorage,
     canvasContext: CanvasRenderingContext2D,
+    pos: Pos,
   ) {
+    const { x: initX, y: initY } = pos
     const width = table.width
     const height = table.height
     const cellParams = table.cellParams
@@ -191,8 +254,8 @@ export namespace Table {
       const cell = cells[cellIndex]
       const [rowIndex, columnIndex] = [cellIndex % rowsCount, cellIndex / rowsCount | 0]
       if (columnIndex >= columnsCount) { break }
-      const x = rowIndex * (gapX + cellWidth)
-      const y = columnIndex * (gapY + cellHeight)
+      const x = initX + rowIndex * (gapX + cellWidth)
+      const y = initY + columnIndex * (gapY + cellHeight)
       CellView.draw(canvasContext, cellParams, gameCoverStorage, cell, [x, y])
     }
   }
@@ -201,9 +264,64 @@ export namespace Table {
     table: Table,
     gameCoverStorage: GameCoverStorage,
     canvasContext: CanvasRenderingContext2D,
+    pos: Pos,
+  ) {
+    drawCells(table, gameCoverStorage, canvasContext, pos)
+  }
+}
+
+export type OutputImage = {
+  titleView: TextView
+  tableView: Table
+  size: Size
+}
+
+export namespace OutputImage {
+  const gap = 10
+
+  export function create(
+    canvasContext: CanvasRenderingContext2D,
+    cellStorage: CellStorage,
+  ): OutputImage {
+    const titleFontSize = 60
+    const titleView = TextView.create(
+      canvasContext,
+      "black",
+      `${titleFontSize}px Tahoma`,
+      "Любимые игры",
+      titleFontSize,
+    )
+    const tableView = Table.create(cellStorage, 6)
+    const size = {
+      width: tableView.width,
+      height: titleView.height + gap + tableView.height,
+    }
+    return {
+      titleView,
+      tableView,
+      size,
+    }
+  }
+
+  export function draw(
+    { size, titleView, tableView }: OutputImage,
+    canvasContext: CanvasRenderingContext2D,
+    gameCoverStorage: GameCoverStorage,
   ) {
     canvasContext.fillStyle = "white"
-    canvasContext.fillRect(0, 0, table.width, table. height)
-    drawCells(table, gameCoverStorage, canvasContext)
+    canvasContext.fillRect(0, 0, size.width, size.height)
+
+    TextView.draw(
+      titleView,
+      canvasContext,
+      tableView.width / 2 - titleView.width / 2,
+      0
+    )
+    Table.draw(
+      tableView,
+      gameCoverStorage,
+      canvasContext,
+      { x: 0, y: gap + titleView.height },
+    )
   }
 }
