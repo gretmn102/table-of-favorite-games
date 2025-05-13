@@ -1,7 +1,7 @@
 import GameCoverStorage from "../stores/gameCoverStorage"
 import CellData from "../stores/cellData"
 import CellStorage from "../stores/cellStorage"
-import { calcFitScale } from "./utils"
+import { calcFitScale, type Pos, type Size } from "./utils"
 
 export type TextView = {
   lineHeight: number
@@ -38,8 +38,16 @@ export namespace TextView {
     context: CanvasRenderingContext2D,
     text: string,
     lineHeight: number,
-    maxWidth: number,
+    maxWidth?: number,
   ): TextView {
+    if (!maxWidth) {
+      return {
+        lineHeight,
+        width: context.measureText(text).width,
+        height: lineHeight,
+        lines: [text],
+      }
+    }
     const lines = splitToLines(context, text, maxWidth)
     return {
       lineHeight,
@@ -216,7 +224,9 @@ export namespace Table {
     table: Table,
     gameCoverStorage: GameCoverStorage,
     canvasContext: CanvasRenderingContext2D,
+    pos: Pos,
   ) {
+    const { x: initX, y: initY } = pos
     const width = table.width
     const height = table.height
     const cellParams = table.cellParams
@@ -233,8 +243,8 @@ export namespace Table {
       const cell = cells[cellIndex]
       const [rowIndex, columnIndex] = [cellIndex % rowsCount, cellIndex / rowsCount | 0]
       if (columnIndex >= columnsCount) { break }
-      const x = rowIndex * (gapX + cellWidth)
-      const y = columnIndex * (gapY + cellHeight)
+      const x = initX + rowIndex * (gapX + cellWidth)
+      const y = initY + columnIndex * (gapY + cellHeight)
       CellView.draw(canvasContext, cellParams, gameCoverStorage, cell, [x, y])
     }
   }
@@ -243,9 +253,64 @@ export namespace Table {
     table: Table,
     gameCoverStorage: GameCoverStorage,
     canvasContext: CanvasRenderingContext2D,
+    pos: Pos,
+  ) {
+    drawCells(table, gameCoverStorage, canvasContext, pos)
+  }
+}
+
+export type OutputImage = {
+  titleView: TextView
+  tableView: Table
+  size: Size
+}
+
+export namespace OutputImage {
+  export function create(
+    canvasContext: CanvasRenderingContext2D,
+    cellStorage: CellStorage,
+  ): OutputImage {
+    canvasContext.fillStyle = "black"
+    canvasContext.font = "bold 20px Tahoma"
+    const titleView = TextView.create(
+      canvasContext,
+      "Любимые игры",
+      22,
+    )
+    const tableView = Table.create(cellStorage, 6)
+    const size = {
+      width: tableView.width,
+      height: titleView.height + tableView.height,
+    }
+    return {
+      titleView,
+      tableView,
+      size,
+    }
+  }
+
+  export function draw(
+    { size, titleView, tableView }: OutputImage,
+    canvasContext: CanvasRenderingContext2D,
+    gameCoverStorage: GameCoverStorage,
   ) {
     canvasContext.fillStyle = "white"
-    canvasContext.fillRect(0, 0, table.width, table. height)
-    drawCells(table, gameCoverStorage, canvasContext)
+    canvasContext.fillRect(0, 0, size.width, size.height)
+
+    canvasContext.textBaseline = "top"
+    canvasContext.fillStyle = "black"
+    canvasContext.font = "bold 20px Tahoma"
+    TextView.draw(
+      titleView,
+      canvasContext,
+      tableView.width / 2 - titleView.width / 2,
+      0
+    )
+    Table.draw(
+      tableView,
+      gameCoverStorage,
+      canvasContext,
+      { x: 0, y: titleView.height},
+    )
   }
 }

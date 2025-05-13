@@ -10,7 +10,7 @@
   import Palette from "./components/Palette.svelte"
   import GameCanvas from "./components/GameCanvas.svelte"
   import Button from "./components/Button.svelte"
-  import { CellParams, Table } from "./lib/table"
+  import { CellParams, OutputImage, Table } from "./lib/table"
   import { download } from "./lib/fileInputOutput";
 
   let gameCoverActive: Option<GameCoverId> = undefined
@@ -90,13 +90,13 @@
           "items-center",
         ])}>
           <Button onClick={() => {
-            const table = Table.create(cells, 6)
             const canvas = document.createElement("canvas")
-            canvas.width = table.width
-            canvas.height = table.height
             const ctx = canvas.getContext("2d")
             if (!ctx) { return }
-            Table.draw(table, gameCoverStorage, ctx)
+            const outputImage = OutputImage.create(ctx, cells)
+            canvas.width = outputImage.size.width
+            canvas.height = outputImage.size.height
+            OutputImage.draw(outputImage, ctx, gameCoverStorage)
             canvas.toBlob(blob => {
               if (blob) {
                 download(blob, "table-of-favorite-game.png")
