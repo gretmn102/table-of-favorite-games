@@ -10,8 +10,10 @@
 
 Вдохновила таблица-шаблон (см. ниже) от некого [powar3nok](https://discord.com/users/370460453689753600) на [Корабль котиков](https://discord.com/invite/cGTbUSSpbV), что и запустило эту вакханалию.
 
-![](./docs/table-template.webp)
-*[Ссылка на сообщение](https://discord.com/channels/876474448126050394/876706882423762994/1368666713482199170), с которого всё началось.*
+<figure>
+  <img src="./docs/table-template.webp" alt="Первоначальная таблица">
+  <figcaption align="center"><em><a href="https://discord.com/channels/876474448126050394/876706882423762994/1368666713482199170">Ссылка на сообщение</a>, с которого всё началось.</em></figcaption>
+</figure>
 
 ## Documentation
 
