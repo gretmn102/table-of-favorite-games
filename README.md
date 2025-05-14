@@ -17,7 +17,7 @@
 
 ## Documentation
 
-Placed in the `docs/` folder, started with the [intro](intro.md).
+Placed in the `docs/` folder, started with the [intro](./docs/intro.md).
 
 ## Build
 
