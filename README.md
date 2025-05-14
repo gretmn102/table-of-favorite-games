@@ -8,7 +8,7 @@
 
 ## Вдохновение
 
-Вдохновила таблица-шаблон (см. ниже) от некого [powar3nok](https://discord.com/users/370460453689753600) на [Корабль котиков](https://discord.com/invite/cGTbUSSpbV), что и запустило эту вакханалию.
+Вдохновила таблица-шаблон (см. ниже) от некого [powar3nok](https://discord.com/users/370460453689753600) на [Корабле котиков](https://discord.com/invite/cGTbUSSpbV), что и запустило эту вакханалию.
 
 <figure>
   <img src="./docs/table-template.webp" alt="Первоначальная таблица">
