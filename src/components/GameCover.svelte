@@ -8,6 +8,8 @@
   export let alt = undefined
   export let active = false
   export let onClick: Option<() => void> = undefined
+  export let onDrag: Option<() => void> = undefined
+  export let onDragEnd: Option<() => void> = undefined
 </script>
 
 <button
@@ -21,6 +23,13 @@
   on:click={e => {
     if (onClick) { onClick() }
   }}
+  on:drag={_ => {
+    if (onDrag) { onDrag() }
+  }}
+  on:dragend={_ => {
+    if (onDragEnd) { onDragEnd() }
+  }}
+  draggable
 >
   <img
     class={concat([

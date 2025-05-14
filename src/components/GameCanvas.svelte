@@ -7,6 +7,8 @@
 
   export let cells: CellData[]
   export let onClick: Option<(cellIndex: number) => void> = undefined
+  export let onDrop: Option<(cellIndex: number) => void> = undefined
+  export let onDropAllow: Option<(cellIndex: number) => boolean> = undefined
 </script>
 
 <div class={concat([
@@ -30,6 +32,16 @@
           onClick(cellIndex)
         }
       }}
+      onDrop={() => {
+        if (onDrop) {
+          onDrop(cellIndex)
+        }
+      }}
+      onDropAllow={(() => {
+        if (onDropAllow) {
+          return () => onDropAllow(cellIndex)
+        }
+      })()}
     />
   {/each}
 </div>

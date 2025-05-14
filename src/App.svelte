@@ -14,6 +14,7 @@
   import { download } from "./lib/fileInputOutput";
 
   let gameCoverActive: Option<GameCoverId> = undefined
+  let gameCoverDraged: Option<GameCoverId> = undefined
   let cells: CellStorage = CellStorage.create()
   let gameCoverStorage = GameCoverStorage.create()
 </script>
@@ -52,6 +53,12 @@
           onGameCoverAdded={newGameCover => {
             gameCoverStorage = GameCoverStorage.add(gameCoverStorage, newGameCover)
           }}
+          onDrag={gameCoverId => {
+            gameCoverDraged = gameCoverId
+          }}
+          onDragEnd={gameCoverId => {
+            gameCoverDraged = undefined
+          }}
         />
         <div class={concat([
           "flex-grow",
@@ -78,6 +85,17 @@
                 )
               }
             }}
+          onDrop={cellIndex => {
+            if (!gameCoverDraged) { return }
+            cells = CellStorage.updateCell(
+              cells,
+              cellIndex,
+              cell => {
+                return CellData.updateImageSrc(cell, _ => gameCoverDraged)
+              }
+            )
+          }}
+          onDropAllow={cellIndex => gameCoverDraged !== undefined}
           />
         </div>
         <div class={concat([
