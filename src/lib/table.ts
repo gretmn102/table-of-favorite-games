@@ -215,7 +215,7 @@ export namespace Table {
     cells: CellStorage,
     columnsCount: number,
   ): Table {
-    const [gapX, gapY] = [50, 58]
+    const [gapX, gapY] = [4, 12]
     const cellParams = CellParams.create()
     const [width, height] = Table.defineSize(
       cellParams, cells.length, gapX, gapY, columnsCount
